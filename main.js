@@ -92,9 +92,68 @@ const addClues = numOfClues => {
   }
 };
 
+const incrementClues = () => {
+  mineField.forEach((row, xCoord) => {
+    row.forEach((square, yCoord) => {
+      if (square === 1) {
+        let counter = 0;
+
+        let top;
+        let topRight;
+        let right;
+        let bottomRight;
+        let bottom;
+        let bottomLeft;
+        let left;
+        let topLeft;
+
+        !top ? (top = "b") : null;
+        !topRight ? (topRight = "b") : null;
+        !right ? (right = "b") : null;
+        !bottomRight ? (bottomRight = "b") : null;
+        !bottom ? (bottom = "b") : null;
+        !bottomLeft ? (bottomLeft = "b") : null;
+        !left ? (left = "b") : null;
+        !topLeft ? (topLeft = "b") : null;
+
+        top = mineField[xCoord][yCoord + 1];
+        topRight = mineField[xCoord + 1][yCoord + 1];
+        right = mineField[xCoord + 1][yCoord];
+        bottomRight = mineField[xCoord + 1][yCoord - 1];
+        bottom = mineField[xCoord][yCoord - 1];
+        bottomLeft = mineField[xCoord - 1][yCoord - 1];
+        left = mineField[xCoord - 1][yCoord];
+        topLeft = mineField[xCoord - 1][yCoord + 1];
+
+        top === "X" ? counter++ : null;
+        topRight === "X" ? counter++ : null;
+        right === "X" ? counter++ : null;
+        bottomRight === "X" ? counter++ : null;
+        bottom === "X" ? counter++ : null;
+        bottomLeft === "X" ? counter++ : null;
+        left === "X" ? counter++ : null;
+        toLeft === "X" ? counter++ : null;
+        mineField[xCoord].splice(yCoord, 1, counter);
+      }
+    });
+  });
+};
+
+removeZeroes = () => {
+  mineField.forEach((row, xCoord) => {
+    row.forEach((square, yCoord) => {
+      if (square === 0) {
+        mineField[xCoord].splice([yCoord], 1, "-");
+      }
+    });
+  });
+};
+
 mineField = generateMineField(15, 15);
 // console.log(mineField);
 generateMines(30);
 addClues(70);
+// incrementClues();
+removeZeroes();
 insertField(mineField);
 // console.log(generateRandomNumber(2) + generateRandomNegativeNumber(-2));
