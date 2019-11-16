@@ -10,18 +10,19 @@ const generateMineField = (amountRows, amountColumns) => {
 
   mineField.forEach(row => {
     while (amountColumns > row.length) {
-      row.push(0);
+      row.push("");
     }
   });
 
   return mineField;
 };
 
-// returns number between 0 and maxNum - 1 to be used as an array reference
+// returns number between 0 and maxNum to be used as an array reference
 const generateRandomNumber = maxNum => {
   return Math.floor(Math.random() * maxNum);
 };
 
+// returns number between 0 and maxNum. Input is negative numbers
 const generateRandomNegativeNumber = maxNum => {
   return Math.ceil(Math.random() * maxNum);
 };
@@ -61,18 +62,22 @@ const insertField = array => {
   });
 };
 
+// generates a random coordinate on the game field
 const generateRandomCoord = coord => {
-  let oldCoord = coord === undefined ? 0 : coord;
   let newCoord =
     coord + (generateRandomNumber(2) + generateRandomNegativeNumber(-2));
   if (newCoord === 15) {
-    generateRandomCoord(oldCoord);
+    newCoord = 14;
+    return newCoord;
   } else if (newCoord === -1) {
-    generateRandomCoord(oldCoord);
+    newCoord = 0;
+    return newCoord;
   } else {
     return newCoord;
   }
 };
+
+// adds clues to the game field
 const addClues = numOfClues => {
   while (numOfClues > 0) {
     mineField.forEach((row, xCoord) => {
@@ -82,7 +87,7 @@ const addClues = numOfClues => {
           randomX ? null : (randomX = 0);
           let randomY = generateRandomCoord(yCoord);
           randomY ? null : (randomY = 0);
-          if (mineField[randomX][randomY] !== "X") {
+          if (!mineField[randomX][randomY]) {
             mineField[randomX].splice(randomY, 1, 1);
             numOfClues--;
           }
@@ -92,8 +97,22 @@ const addClues = numOfClues => {
   }
 };
 
+
+
+
 mineField = generateMineField(15, 15);
 // console.log(mineField);
+const test = () => {
+  mineField.forEach((row, xCoord) => {
+    // let x = xCoord
+    row.forEach((square, yCoord) => {
+      // let randomX = generateRandomCoord(x)
+      console.log(xCoord)
+      console.log(yCoord)
+      // return randomX
+    })
+  });
+}
 generateMines(30);
 addClues(70);
 insertField(mineField);
