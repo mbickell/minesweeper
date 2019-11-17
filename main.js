@@ -108,6 +108,17 @@ mineField.forEach((row, yCoord) => {
   row.forEach((square, xCoord) => {
     if(square === 1) {
       let counter = 0;
+      /*
+      for(y = Math.min(0, yCoord - 1); y <= Math.max(yCoord + 1, mineField.length); y++) {
+        for(x = Math.min(0, xCoord - 1); y <= Math.max(xCoord + 1, mineField[yCoord].length); x++) {
+          if(mineField[y][x] === "X") {
+          counter++
+          }
+        }
+      }
+      
+      mineField[yCoord].splice(xCoord, 1, counter)
+      */
       let topLeft = (mineField[yCoord - 1]) ? getNeighbour(mineField, yCoord, -1, xCoord, -1) : 0;
       let top = (mineField[yCoord - 1]) ? (mineField[yCoord - 1][xCoord]) ? mineField[yCoord - 1][xCoord] : 0 : 0;
       let topRight = (mineField[yCoord - 1]) ? (mineField[yCoord - 1][xCoord + 1]) ? mineField[yCoord - 1][xCoord + 1] : 0 : 0;
