@@ -1,27 +1,27 @@
 let mineField = [];
 
 // creates minefield and returns a global object
-const generateMineField = (amountRows, amountColumns) => {
+const generateMineField = amountRowsAndColumns => {
   let mineField = [];
-  while (amountRows > 0) {
+  while (amountRowsAndColumns > mineField.length) {
     mineField.push([]);
-    amountRows--;
   }
 
   mineField.forEach(row => {
-    while (amountColumns > row.length) {
-      row.push(0);
+    while (amountRowsAndColumns > row.length) {
+      row.push("");
     }
   });
 
   return mineField;
 };
 
-// returns number between 0 and maxNum - 1 to be used as an array reference
+// returns number between 0 and maxNum to be used as an array reference
 const generateRandomNumber = maxNum => {
   return Math.floor(Math.random() * maxNum);
 };
 
+// returns number between 0 and maxNum. Input is negative numbers
 const generateRandomNegativeNumber = maxNum => {
   return Math.ceil(Math.random() * maxNum);
 };
@@ -29,10 +29,10 @@ const generateRandomNegativeNumber = maxNum => {
 // insert mines into field based on whether or not a mine already exists in that location
 const generateMines = numOfMines => {
   while (numOfMines > 0) {
-    let randomX = generateRandomNumber(15);
-    let randomY = generateRandomNumber(15);
-    if (!mineField[randomX][randomY]) {
-      mineField[randomX].splice(randomY, 1, "X");
+    let randomY = generateRandomNumber(mineField.length);
+    let randomX = generateRandomNumber(mineField.length);
+    if (!mineField[randomY][randomX]) {
+      mineField[randomY].splice(randomX, 1, "X");
       numOfMines--;
     } else {
       null;
@@ -61,29 +61,32 @@ const insertField = array => {
   });
 };
 
+// generates a random coordinate on the game field
 const generateRandomCoord = coord => {
-  let oldCoord = coord === undefined ? 0 : coord;
-  let newCoord =
-    coord + (generateRandomNumber(2) + generateRandomNegativeNumber(-2));
-  if (newCoord === 15) {
-    generateRandomCoord(oldCoord);
+  let newCoord = coord + (generateRandomNumber(2) + generateRandomNegativeNumber(-2));
+  if (newCoord === mineField.length) {
+    newCoord = mineField.length - 1;
+    return newCoord;
   } else if (newCoord === -1) {
-    generateRandomCoord(oldCoord);
+    newCoord = 0;
+    return newCoord;
   } else {
     return newCoord;
   }
 };
+
+// adds clues to the game field
 const addClues = numOfClues => {
   while (numOfClues > 0) {
-    mineField.forEach((row, xCoord) => {
-      row.forEach((square, yCoord) => {
+    mineField.forEach((row, yCoord) => {
+      row.forEach((square, xCoord) => {
         if (square === "X") {
-          let randomX = generateRandomCoord(xCoord);
-          randomX ? null : (randomX = 0);
           let randomY = generateRandomCoord(yCoord);
           randomY ? null : (randomY = 0);
-          if (mineField[randomX][randomY] !== "X") {
-            mineField[randomX].splice(randomY, 1, 1);
+          let randomX = generateRandomCoord(xCoord);
+          randomX ? null : (randomX = 0);
+          if (!mineField[randomY][randomX]) {
+            mineField[randomY].splice(randomX, 1, 1);
             numOfClues--;
           }
         }
@@ -92,68 +95,29 @@ const addClues = numOfClues => {
   }
 };
 
+// Loops through array, checks all neighbouring cells of clues and changed 1 to the appropriate number
 const incrementClues = () => {
-  mineField.forEach((row, xCoord) => {
-    row.forEach((square, yCoord) => {
+  mineField.forEach((row, yCoord) => {
+    row.forEach((square, xCoord) => {
       if (square === 1) {
         let counter = 0;
 
-        let top;
-        let topRight;
-        let right;
-        let bottomRight;
-        let bottom;
-        let bottomLeft;
-        let left;
-        let topLeft;
+        for (y = Math.max(0, yCoord - 1); y <= Math.min(yCoord + 1, mineField.length - 1); y++) {
+          for (x = Math.max(0, xCoord - 1); x <= Math.min(xCoord + 1, mineField[yCoord].length - 1); x++) {
+            if (mineField[y][x] === "X") {
+              counter++;
+            }
+          }
+        }
 
-        !top ? (top = "b") : null;
-        !topRight ? (topRight = "b") : null;
-        !right ? (right = "b") : null;
-        !bottomRight ? (bottomRight = "b") : null;
-        !bottom ? (bottom = "b") : null;
-        !bottomLeft ? (bottomLeft = "b") : null;
-        !left ? (left = "b") : null;
-        !topLeft ? (topLeft = "b") : null;
-
-        top = mineField[xCoord][yCoord + 1];
-        topRight = mineField[xCoord + 1][yCoord + 1];
-        right = mineField[xCoord + 1][yCoord];
-        bottomRight = mineField[xCoord + 1][yCoord - 1];
-        bottom = mineField[xCoord][yCoord - 1];
-        bottomLeft = mineField[xCoord - 1][yCoord - 1];
-        left = mineField[xCoord - 1][yCoord];
-        topLeft = mineField[xCoord - 1][yCoord + 1];
-
-        top === "X" ? counter++ : null;
-        topRight === "X" ? counter++ : null;
-        right === "X" ? counter++ : null;
-        bottomRight === "X" ? counter++ : null;
-        bottom === "X" ? counter++ : null;
-        bottomLeft === "X" ? counter++ : null;
-        left === "X" ? counter++ : null;
-        toLeft === "X" ? counter++ : null;
-        mineField[xCoord].splice(yCoord, 1, counter);
-      }
-    });
-  });
-};
-
-removeZeroes = () => {
-  mineField.forEach((row, xCoord) => {
-    row.forEach((square, yCoord) => {
-      if (square === 0) {
-        mineField[xCoord].splice([yCoord], 1, "-");
+        mineField[yCoord].splice(xCoord, 1, counter);
       }
     });
   });
 };
 
 mineField = generateMineField(15, 15);
-// console.log(mineField);
 generateMines(30);
-addClues(70);
-// incrementClues();
-removeZeroes();
+addClues(50);
+incrementClues();
 insertField(mineField);
-// console.log(generateRandomNumber(2) + generateRandomNegativeNumber(-2));
