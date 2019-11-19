@@ -13,7 +13,7 @@ main {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  font-size: 2vh;
+  font-size: 3vh;
 }
 
 p {
@@ -25,9 +25,9 @@ span {
   vertical-align: bottom;
   background-color: black;
   display: inline-block;
-  width: 3vh;
-  height: 3vh;
+  width: 3.5vh;
+  height: 3.5vh;
   text-align: center;
   padding: 0.2vw;
-  border: 1px solid white;
+  border: 0.5px solid white;
 }

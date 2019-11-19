@@ -116,7 +116,7 @@ const incrementClues = () => {
   });
 };
 
-mineField = generateMineField(15, 15);
+mineField = generateMineField(15);
 generateMines(30);
 addClues(50);
 incrementClues();
