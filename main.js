@@ -76,23 +76,20 @@ const generateRandomCoord = coord => {
 };
 
 // adds clues to the game field
-const addClues = numOfClues => {
-  while (numOfClues > 0) {
-    mineField.forEach((row, yCoord) => {
-      row.forEach((square, xCoord) => {
-        if (square === "X") {
-          let randomY = generateRandomCoord(yCoord);
-          randomY ? null : (randomY = 0);
-          let randomX = generateRandomCoord(xCoord);
-          randomX ? null : (randomX = 0);
-          if (!mineField[randomY][randomX]) {
-            mineField[randomY].splice(randomX, 1, 1);
-            numOfClues--;
+const addClues = () => {
+  mineField.forEach((row, yCoord) => {
+    row.forEach((square, xCoord) => {
+      if (square === "X") {
+        for (y = Math.max(0, yCoord - 1); y <= Math.min(yCoord + 1, mineField.length - 1); y++) {
+          for (x = Math.max(0, xCoord - 1); x <= Math.min(xCoord + 1, mineField[yCoord].length - 1); x++) {
+            if (!mineField[y][x]) {
+              mineField[y].splice(x, 1, 1);
+            }
           }
         }
-      });
+      }
     });
-  }
+  });
 };
 
 // Loops through array, checks all neighbouring cells of clues and changed 1 to the appropriate number
@@ -118,6 +115,6 @@ const incrementClues = () => {
 
 mineField = generateMineField(15);
 generateMines(30);
-addClues(50);
+addClues();
 incrementClues();
 insertField(mineField);
