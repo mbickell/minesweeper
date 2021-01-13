@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Minesweeper</title>
+  </head>
+  <body>
+    <form>
+      <section>
+        <div>
+          <label for="rows">Rows:</label>
+          <input type="number" name="rows" id="rows" value="15" min="1" />
+        </div>
+        <div>
+          <label for="columns">Columns:</label>
+          <input type="number" name="columns" id="columns" value="15" min="1" />
+        </div>
+        <div>
+          <label for="mines">Mines:</label>
+          <input type="number" name="mines" id="mines" value="30" min="1" />
+        </div>
+      </section>
+      <input type="submit" value="Generate" />
+    </form>
+    <main>
+      <section id="field"></section>
+    </main>
+    <script src="main.js"></script>
+  </body>
+</html>
