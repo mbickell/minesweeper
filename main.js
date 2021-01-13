@@ -91,6 +91,13 @@ const colourClues = (rows, cols) => {
         case "8":
           clue.style.color = "orange";
           break;
+        // case "X":
+        //   // clue.style.color = "lightGrey";
+        //   // clue.style.color = "white";
+        //   break;
+        case "":
+          clue.style.backgroundColor = "lightGrey";
+          break;
       }
     }
   }
