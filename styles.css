@@ -19,10 +19,6 @@ form section div {
   margin: 10px;
 }
 
-label {
-  /* width: 20%; */
-}
-
 input {
   width: 100%;
 }
@@ -35,7 +31,7 @@ main {
   background-color: black;
 }
 
-#field {
+main section {
   border: 1px solid white;
   padding: 10px;
 }
