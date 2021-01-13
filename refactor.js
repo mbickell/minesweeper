@@ -14,19 +14,21 @@ const generateGrid = (rows, cols) => {
   return grid;
 };
 
-const placeMines = (noOfMines, grid) => {
+const getMineIndex = (noOfMines, grid) => {
+  const mineIndex = [];
+
   while (true) {
     const xCoord = generateInteger(0, grid.length - 1);
     const yCoord = generateInteger(0, grid[0].length - 1);
 
-    if (grid[xCoord][yCoord] === "X") continue;
+    if (mineIndex.find((index) => index?.xCoord === xCoord && index?.yCoord === yCoord)) continue;
 
-    grid[xCoord][yCoord] = "X";
+    mineIndex.push({ xCoord, yCoord });
     noOfMines--;
     if (noOfMines <= 0) break;
   }
 
-  return grid;
+  return mineIndex;
 };
 
 const checkSurroundingCells = (grid, xCoord, yCoord) => {
@@ -39,13 +41,10 @@ const checkSurroundingCells = (grid, xCoord, yCoord) => {
   }
 };
 
-const placeClues = (grid) => {
-  grid.forEach((row, xCoord) => {
-    row.forEach((cell, yCoord) => {
-      if (cell === "X") {
-        checkSurroundingCells(grid, xCoord, yCoord);
-      }
-    });
+const placeMinesAndClues = (mineIndex, grid) => {
+  mineIndex.forEach(({ xCoord, yCoord }) => {
+    grid[xCoord][yCoord] = "X";
+    checkSurroundingCells(grid, xCoord, yCoord);
   });
 
   return grid;
@@ -99,8 +98,8 @@ const colourClues = (rows, cols) => {
 const init = (noOfMines, rows, cols) => {
   console.time("init");
   const emptyGrid = generateGrid(rows, cols);
-  const gridWithMines = placeMines(noOfMines, emptyGrid);
-  const gridWithClues = placeClues(gridWithMines);
+  const mineIndex = getMineIndex(noOfMines, emptyGrid);
+  const gridWithClues = placeMinesAndClues(mineIndex, emptyGrid);
   renderMineField(gridWithClues);
   colourClues(rows, cols);
   console.timeEnd("init");
